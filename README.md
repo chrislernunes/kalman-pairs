@@ -1,58 +1,56 @@
 # kalman-pairs
 
-Minimalist Kalman Filter pairs trading on commodity futures using **yfinance** data.
+Kalman Filter pairs trading — adapted from the [QuantInsti blog](https://blog.quantinsti.com/kalman-filter-techniques-statistical-arbitrage-china-futures-market-python/) on statistical arbitrage in China’s futures market.
 
-Adapted from the [QuantInsti EPAT blog](https://blog.quantinsti.com/kalman-filter-techniques-statistical-arbitrage-china-futures-market-python/) on statistical arbitrage in China’s futures market. This version replaces proprietary Chinese futures data with publicly available liquid commodity futures and adds an updated notebook with executed outputs.
+## Original Tickers
 
-## Idea
+The shared files used these 34 Chinese futures contracts:
 
-1. Download daily closes for liquid commodity futures via `yfinance`.
-2. Screen for cointegrated pairs (Engle-Granger / ADF).
-3. Estimate **dynamic hedge ratios** with a Kalman Filter regression.
-4. Compute the half-life of mean reversion on the spread.
-5. Generate z-score signals using a rolling window equal to the half-life.
-6. Trade ±2 entry / 0 exit. Equal-weight the surviving pairs into a portfolio.
+```
+M, SR, FG, CU, SN, NI, RM, AG, OI, CF, HC, J, I, TA, PB, AU, RB, V, JD, MA, TC, A, ZN, SF, P, C, BU, PP, JM, RU, AL, Y, CS, L
+```
 
-## Data
+These exact contracts are **not available on yfinance**. The notebook uses the closest liquid commodity futures proxies that *are* available (`CL`, `BZ`, `GC`, `SI`, `HG`, `NG`, `ZC`, `ZS`, `KC`, `CT`, `ZW`, `LE`).
 
-| Symbol | Instrument       |
-|--------|------------------|
-| CL     | WTI Crude        |
-| BZ     | Brent Crude      |
-| GC     | Gold             |
-| SI     | Silver           |
-| HG     | Copper           |
-| NG     | Natural Gas      |
-| ZC     | Corn             |
-| ZS     | Soybeans         |
-| KC     | Coffee           |
-| CT     | Cotton           |
+## Approach
 
-Period: 2018-01-02 → 2026-10-30 (≈2,223 trading days).
+1. Cointegration screening (Engle-Granger)
+2. Dynamic hedge ratio via Kalman Filter regression
+3. Half-life of mean reversion as the rolling window
+4. Z-score signals: enter at ±2, exit at 0
+5. Equal-weight portfolio of pairs that pass Sharpe > 0.5 and final equity > 1.105 on the training window
 
 ## Results (executed notebook)
 
-**In-sample** (2018-01-02 → 2024-03-07)  
-**Out-sample** (2024-03-08 → 2026-10-30)
+**Train:** 2018-01-02 → 2024-03-07  
+**Test:** 2024-03-08 → 2026-10-30
 
-| Period       | Total Return | CAGR   | Sharpe | Max DD  |
-|--------------|--------------|--------|--------|---------|
-| In-sample    | +268%        | 23.5%  | 1.15   | -15.9%  |
-| Out-sample   | +17.6%       | 6.3%   | 0.34   | -26.6%  |
+| Period     | Total Return | CAGR  | Sharpe | Max DD  |
+|------------|--------------|-------|--------|---------|
+| In-sample  | +308%        | 25.6% | 1.74   | -9.5%   |
+| Out-sample | +25%         | 9.0%  | 0.55   | -13.1%  |
 
-Only one pair (ZC-KC) cleared the filters (Sharpe > 0.8 and CAGR > 5%) on the training window. Results are shown without transaction costs or slippage.
+Three pairs cleared the filters: **ZS-LE**, **ZS-CT**, **GC-CT**.
 
-### Portfolio equity & drawdowns
+### In-sample
 
-![Portfolio Performance](portfolio_performance.png)
+![In-Sample Returns](insample_returns.png)
 
-### Example pair detail (ZC–KC)
+![In-Sample Portfolio](insample_portfolio.png)
 
-![Example Pair](example_pair.png)
+![In-Sample Drawdown](insample_drawdown.png)
+
+### Out-sample
+
+![Out-Sample Returns](outsample_returns.png)
+
+![Out-Sample Portfolio](outsample_portfolio.png)
+
+![Out-Sample Drawdown](outsample_drawdown.png)
 
 ## Notebook
 
-`kalman_pairs_executed.ipynb` contains the full pipeline with all cells executed and outputs (including charts) saved.
+`kalman_pairs_executed.ipynb` — full pipeline with all cells executed and outputs saved. Structure mirrors the original sample (functions, pair selection thresholds, ffn performance stats, in/out-sample split).
 
 ## Quick start
 
@@ -63,10 +61,9 @@ jupyter notebook kalman_pairs_executed.ipynb
 
 ## Notes
 
-- Kalman Filter provides a continuously updated hedge ratio without a fixed lookback.
-- Half-life is used both as a tradability filter and as the rolling window for z-score calculation.
-- Cointegration is re-tested on the full sample; in a live system it should be monitored continuously.
-- No costs modeled. Real implementation would need realistic commission, slippage, and contract roll handling.
+- No transaction costs or slippage modeled.
+- Chinese futures data is not on yfinance; proxies are used.
+- Cointegration and half-life should be monitored continuously in live use.
 
 ## License
 

@@ -6,9 +6,11 @@ Kalman Filter pairs trading on China futures.
 
 Daily closes for 33 China futures contracts, 2020-01-02 → 2026-11-20.
 
-Tickers: `A, AG, AL, AU, BU, C, CF, CS, CU, FG, HC, I, J, JD, JM, L, M, MA, NI, OI, P, PB, PP, RB, RM, RU, SF, SN, SR, TA, V, Y, ZN`
+```
+A, AG, AL, AU, BU, C, CF, CS, CU, FG, HC, I, J, JD, JM, L, M, MA, NI, OI, P, PB, PP, RB, RM, RU, SF, SN, SR, TA, V, Y, ZN
+```
 
-Source file: `china_futures_2020_2026.csv`
+Source: `china_futures_2020_2026.csv`
 
 ## Approach
 
@@ -36,7 +38,7 @@ Source file: `china_futures_2020_2026.csv`
 
 ![In-Sample Portfolio](insample_portfolio.png)
 
-![In-Sample Drawdown](insample_drawdown.png)
+![In-Sample Portfolio Drawdown](insample_port_drawdown.png)
 
 ### Out-sample
 
@@ -48,7 +50,7 @@ Source file: `china_futures_2020_2026.csv`
 
 ## Notebook
 
-`kalman_pairs_executed.ipynb` — full pipeline with executed outputs and charts.
+`kalman_pairs_executed.ipynb` — full pipeline with executed outputs.
 
 ## Quick start
 

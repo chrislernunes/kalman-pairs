@@ -20,18 +20,6 @@ Source: `china_futures_2020_2026.csv`
 4. Signals: enter at ±2, exit at 0
 5. Equal-weight portfolio of pairs with in-sample Sharpe > 0.5 and final equity > 1.105
 
-## Results
-
-**Train:** 2020-01-02 → 2024-10-29  
-**Test:** 2024-10-30 → 2026-11-20
-
-| Period     | Total Return | CAGR | Sharpe | Max DD |
-|------------|--------------|------|--------|--------|
-| In-sample  | +39%         | 7.1% | 2.68   | -4.2%  |
-| Out-sample | +3.9%        | 1.9% | 2.30   | -0.5%  |
-
-25 pairs passed the filters.
-
 ### In-sample
 
 ![In-Sample Returns](insample_returns.png)
@@ -39,25 +27,6 @@ Source: `china_futures_2020_2026.csv`
 ![In-Sample Portfolio](insample_portfolio.png)
 
 ![In-Sample Portfolio Drawdown](insample_port_drawdown.png)
-
-### Out-sample
-
-![Out-Sample Returns](outsample_returns.png)
-
-![Out-Sample Portfolio](outsample_portfolio.png)
-
-![Out-Sample Drawdown](outsample_drawdown.png)
-
-## Notebook
-
-`kalman_pairs_executed.ipynb` — full pipeline with executed outputs.
-
-## Quick start
-
-```bash
-pip install -r requirements.txt
-jupyter notebook kalman_pairs_executed.ipynb
-```
 
 ## Notes
 
